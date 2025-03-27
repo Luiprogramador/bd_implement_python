@@ -52,7 +52,7 @@ venv\Scripts\activate # Windows
 
 ## 📧 Contato
 
-Para dúvidas ou sugestões: [seu-email@exemplo.com](mailto:lui.brito@sempreceub.com)
+Para dúvidas ou sugestões: [lui.brito@sempreceub.com](mailto:seu-email@exemplo.com)
 
 ---
 
