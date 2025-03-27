@@ -56,7 +56,7 @@ Para dúvidas ou sugestões: [seu-email@exemplo.com](mailto:lui.brito@sempreceub
 
 ---
 
-**Última atualização:** {{date}}  
+**Última atualização:** 27/03/2025
 **Versão atual:** 0.2.1  
 
 > "Dados são a nova matéria-prima do século XXI" - Adaptado de Clive Humby
