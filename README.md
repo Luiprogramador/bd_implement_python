@@ -50,10 +50,6 @@ venv\Scripts\activate # Windows
 4. Push para a branch (`git push origin feature/nova-aula`)
 5. Abra um Pull Request
 
-## 📝 Licença
-
-Este projeto está licenciado sob a licença MIT - veja o arquivo [LICENSE](LICENSE) para detalhes.
-
 ## 📧 Contato
 
 Para dúvidas ou sugestões: [seu-email@exemplo.com](mailto:lui.brito@sempreceub.com)
