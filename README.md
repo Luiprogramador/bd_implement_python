@@ -13,7 +13,6 @@ Este repositório tem como finalidade armazenar e organizar materiais de aula, e
 
 - Conexão com bancos de dados relacionais (SQLite, PostgreSQL, MySQL)
 - ORMs (SQLAlchemy, Django ORM, Peewee)
-- Bancos de dados NoSQL (MongoDB, Redis)
 - Modelagem de dados
 - Operações CRUD
 - Transações e concorrência
