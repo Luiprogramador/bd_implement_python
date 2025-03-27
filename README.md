@@ -24,19 +24,7 @@ Este repositório tem como finalidade armazenar e organizar materiais de aula, e
 ```bash
 .
 ├── 📁 01-introducao/ # Conceitos básicos de BD e Python
-│ ├── 📄 conexao_basica.py # Primeira conexão com BD
-│ └── 📄 tipos_dados.py # Mapeamento de tipos de dados
-├── 📁 02-orms/ # Trabalhando com ORMs
-│ ├── 📄 sqlalchemy/
-│ └── 📄 peewee/
-├── 📁 03-nosql/ # Bancos não relacionais
-│ ├── 📄 mongodb/
-│ └── 📄 redis/
-├── 📁 exemplos/ # Exemplos práticos
-│ ├── 📄 sistema_academico/ # Modelo acadêmico
-│ └── 📄 ecommerce/ # Modelo de e-commerce
-├── 📄 .env.example # Modelo para variáveis de ambiente
-└── 📄 requirements.txt # Dependências do projeto
+│ ├── 📄 Aula1.py # Primeira conexão com BD
 ```
 
 ## 🚀 Como Usar
@@ -53,23 +41,7 @@ source venv/bin/activate # Linux/Mac
 venv\Scripts\activate # Windows
 ```
 
-3. Instale as dependências:
-```bash
-pip install -r requirements.txt
-```
-
-4. Copie o arquivo .env.example para .env e configure suas credenciais de banco de dados
-
 5. Explore os exemplos e aulas!
-
-## 📅 Progresso do Curso
-
-| Módulo | Status | Última Atualização |
-|----------------|-------------|--------------------|
-| Introdução | ✅ Completo | 25/03/2025 |
-| ORMs | ⏳ Em andamento | 20/03/2025 |
-| NoSQL | 🚧 Planejado | - |
-| Projetos Práticos | 🚧 Planejado | - |
 
 ## 🤝 Como Contribuir
 
@@ -85,7 +57,7 @@ Este projeto está licenciado sob a licença MIT - veja o arquivo [LICENSE](LICE
 
 ## 📧 Contato
 
-Para dúvidas ou sugestões: [seu-email@exemplo.com](mailto:seu-email@exemplo.com)
+Para dúvidas ou sugestões: [seu-email@exemplo.com](mailto:lui.brito@sempreceub.com)
 
 ---
 
