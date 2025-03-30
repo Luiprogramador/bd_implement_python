@@ -12,11 +12,18 @@ sql = '''select * from db_vendedor'''
 
 cursor.execute(sql)
 l_registros = cursor.fetchall()
-for regis in l_registros:
-    for item in regis:
-        print(item)
+if l_registros:
+    for regis in l_registros:
+        for item in regis:
+            print(item)
+else: 
+    print("Tabela vazia.")
+
 
 print("-"* 50)
 
-for regis in l_registros:
-    print(regis)
+if l_registros:
+    for regis in l_registros:
+        print(regis)
+else:
+    print("Tabela vazia")
