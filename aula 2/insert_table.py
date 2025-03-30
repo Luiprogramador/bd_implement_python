@@ -8,7 +8,7 @@ conexao = sqlite3.connect(database)
 cursor = conexao.cursor()
 
 sql = '''insert into db_vendedor
-    values('43264534673', 'umpa lumpa', 'guará', 10, 2015)'''
+    values('432645346343', 'Ray ano', 'Vicente pires', 22, 2003)'''
 
 
 cursor.execute(sql)

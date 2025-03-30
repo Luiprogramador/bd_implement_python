@@ -26,4 +26,4 @@ if l_registros:
     for regis in l_registros:
         print(regis)
 else:
-    print("Tabela vazia")
+    print("Tabela vazia.")
