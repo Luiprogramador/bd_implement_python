@@ -23,7 +23,8 @@ Este repositório tem como finalidade armazenar e organizar materiais de aula, e
 ```bash
 .
 ├── 📁 01-introducao/ # Conceitos básicos de BD e Python
-│ ├── 📄 Aula1.py # Primeira conexão com BD
+│ ├── 📁 Aula1 # Primeira conexão com BD
+├ ├── 📁 Aula2 # Primeira conexão com BD
 ```
 
 ## 🚀 Como Usar
