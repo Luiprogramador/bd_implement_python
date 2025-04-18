@@ -6,14 +6,12 @@ conexao = mysql.connector.connect(user='root',
                                      database='db_icami')
 
 print('Conexao:', conexao)
-
 cursor = conexao.cursor()
 
-sql = '''INSERT INTO tb_gerente
-         values(1231, "Jonas", 1500.50, 45, "Onde o cascao toma banho / socorro-sp")'''
+sql = '''DROP TABLE tb_gerente'''
 
 cursor.execute(sql)
-conexao.commit()
+
 
 cursor.close()
 conexao.close()

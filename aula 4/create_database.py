@@ -6,4 +6,12 @@ conexao_db = mysql.connector.connect(user='root',
                                      # database='db_empresa')
 
 print('Conexao:\n', conexao_db)
+
+cursor_db = conexao_db.cursor()
+sql = "CREATE DATABASE IF NOT EXISTS db_"
+cursor_db.execute(sql)
+
+cursor_db.close()
 conexao_db.close()
+
+print("conexão fechada")
