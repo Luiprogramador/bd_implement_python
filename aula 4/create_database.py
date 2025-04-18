@@ -8,7 +8,7 @@ conexao_db = mysql.connector.connect(user='root',
 print('Conexao:\n', conexao_db)
 
 cursor_db = conexao_db.cursor()
-sql = "CREATE DATABASE IF NOT EXISTS db_"
+sql = "CREATE DATABASE IF NOT EXISTS db_locadora"
 cursor_db.execute(sql)
 
 cursor_db.close()
