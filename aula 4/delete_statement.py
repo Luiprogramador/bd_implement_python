@@ -14,6 +14,7 @@ cursor.execute(sql)
 
 
 cursor.close()
+conexao.commit()
 conexao.close()
 
 print("Operação concluida")
