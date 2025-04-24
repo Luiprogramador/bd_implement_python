@@ -37,7 +37,7 @@ def consultar_carros_filtro(conn):
             cursor.execute("SELECT * FROM tb_carro WHERE marca LIKE %s", (f'%{valor}%',))
         elif opcao == '3':
             valor = input("Digite o ano (AAAA-MM-DD): ")
-            cursor.execute("SELECT * FROM tb_carro WHERE ano >= %s", (valor,))
+            cursor.execute("SELECT * FROM tb_carro WHERE ano = %s", (valor,))
         elif opcao == '4':
             valor = input("Digite a quantidade mínima em estoque: ")
             cursor.execute("SELECT * FROM tb_carro WHERE qnt_estoque >= %s", (int(valor),))
