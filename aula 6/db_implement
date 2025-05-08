@@ -1,135 +1,156 @@
-import mysql.connector  # Importa o módulo para conectar ao banco de dados MySQL.
-from mysql.connector import Error  # Importa a classe de erro para tratar exceções relacionadas ao MySQL.
-import os  # Importa o módulo 'os', que pode ser usado para manipular o sistema operacional.
+import mysql.connector
+from mysql.connector import Error
+import os
 
 # Função para conectar ao banco de dados MySQL.
 def conectar_banco():
     try:
-        # Tenta estabelecer uma conexão com o banco de dados MySQL.
         conn = mysql.connector.connect(
-            user='root',  # Nome de usuário do banco de dados.
-            password='ceub123456',  # Senha do banco de dados.
-            host='localhost'  # Endereço do servidor MySQL (neste caso, local).
-            # database=''  # Comentado: pode ser usado para especificar o banco de dados.
+            user='root',
+            password='lui1234',
+            host='localhost'
+            #database='db_loja_3'
         )
-        return conn  # Retorna o objeto de conexão se a conexão for bem-sucedida.
-    except Error as e:  # Captura erros relacionados ao MySQL.
-        print(f"Erro ao conectar ao MySQL: {e}")  # Exibe a mensagem de erro.
-        return None  # Retorna None se a conexão falhar.
+        return conn
+    except Error as e:
+        print(f"Erro ao conectar ao MySQL: {e}")
+        return None
 
 # Função para criar o banco de dados.
-def criar_database_sql():
-    sql_create = "CREATE DATABASE if not exists db_loja_3"  # Comando SQL para criar o banco de dados se ele não existir.
-    cursor.execute(sql_create)  # Executa o comando SQL para criar o banco de dados.
-
-    sql_use = "USE db_loja_3"  # Comando SQL para selecionar o banco de dados criado.
-    cursor.execute(sql_use)  # Executa o comando SQL para usar o banco de dados.
+def criar_database_sql(conn):
+    try:
+        cursor = conn.cursor()
+        cursor.execute("CREATE DATABASE IF NOT EXISTS db_loja_3")
+        cursor.execute("USE db_loja_3")
+        print("Banco de dados configurado com sucesso!")
+    except Error as e:
+        print(f"Erro ao criar o banco de dados: {e}")
 
 # Função para criar a tabela no banco de dados.
-def criar_tabela_sql():
+def criar_tabela_sql(cursor):
     try:
-        # Comando SQL para criar a tabela 'produto' se ela não existir.
-        sql_create = '''CREATE TABLE if not exists produto(
-        id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-        nome_produto VARCHAR(25) UNIQUE NOT NULL,
-        preco DECIMAL(9, 2) NOT NULL,
-        data_validade DATE NULL)''' # Define a estrutura da tabela.
+        sql_create = '''CREATE TABLE IF NOT EXISTS produto(
+            id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            nome_produto VARCHAR(25) UNIQUE NOT NULL,
+            preco DECIMAL(9, 2) NOT NULL,
+            data_validade DATE NULL)'''
+        cursor.execute(sql_create)
+        print("Tabela criada com sucesso!")
+    except Error as e:
+        print(f"Erro ao criar a tabela: {e}")
 
-        cursor.execute(sql_create)  # Executa o comando SQL para criar a tabela.
-    except Error as e:  # Captura erros relacionados ao MySQL.
-        print(f"Erro ao executar o MySQL: {e}")  # Exibe a mensagem de erro.
-        return None  # Retorna None se ocorrer um erro.
+# Função para inserir um produto na tabela.
+def inserir_na_tabela(cursor):
+    try:
+        sql_insert = '''INSERT INTO produto(nome_produto, preco, data_validade)
+                        VALUES (%s, %s, %s)'''
+        nome = input("Digite o nome do produto: ")
+        preco = float(input("Digite o preço do produto: "))
+        validade = input("Digite a data de validade (YYYY-MM-DD): ")
+        cursor.execute(sql_insert, (nome, preco, validade))
+        print("Produto inserido com sucesso!")
+    except Error as e:
+        print(f"Erro ao inserir o produto: {e}")
 
-def inserir_na_tabela():
-    sql_insert = '''INSERT INTO produto(nome_produto, preco, data_validade)
-    VALUES (%s, %s, %s)'''  # Comando SQL para inserir dados na tabela 'produto'.
+# Função para listar os produtos.
+def listar_tabela(cursor):
+    try:
+        sql = "SELECT * FROM produto"
 
-    cursor.execute(sql_insert, ('Produto A', 10.50, '2023-12-31'))  # Executa o comando SQL para inserir um produto.
+        cursor.execute(sql)
 
-    print(f"Produto inserido com sucesso!")  # Exibe mensagem de sucesso após a inserção.
+        resultado = cursor.fetchall()
 
-def listar_tabela():
-    sql_select = '''SELECT * FROM produto'''  # Comando SQL para selecionar todos os dados da tabela 'produto'.
-    cursor.execute(sql_select)  # Executa o comando SQL para selecionar os dados.
+        if not resultado:
+            print("tabela vazia.")
 
-    resultado = cursor.fetchall()  # Recupera todos os resultados da consulta.
-    for linha in resultado:  # Itera sobre cada linha do resultado.
-        print(linha)  # Exibe cada linha.
+        else:
+            for func in resultado:
+                print(func)
+                print("-" * 35)
 
-    print(f"Produtos listados com sucesso!")  # Exibe mensagem de sucesso após a listagem.
+            for func in resultado:
+                print("ID:", func[0])
+                print("Nome:", func[1])
+                print("preço:", func[2])
+                print("data de validade:", func[3])
+                print("-"*35)
+    except Error as e:
+        print(f"Erro ao consultar produtos: {e}")
 
-def deletar_tabela():
-    sql_delete = '''DROP TABLE produto'''  # Comando SQL para deletar a tabela 'produto'.
-    cursor.execute(sql_delete)  # Executa o comando SQL para deletar a tabela.
-    print(f"Tabela deletada com sucesso!")  # Exibe mensagem de sucesso após a deleção.
+# Função para atualizar o preço de um produto.
+def atualizar_tabela(cursor):
+    try:
+        sql_update = "UPDATE produto SET preco = %s WHERE nome_produto = %s"
+        nome = input("Digite o nome do produto: ")
+        preco = float(input("Digite o novo preço: "))
+        cursor.execute(sql_update, (preco, nome))
+        print("Produto atualizado com sucesso!")
+    except Error as e:
+        print(f"Erro ao atualizar o produto: {e}")
 
-def atualizar_tabela():
-    sql_update = '''UPDATE produto SET preco = %s WHERE nome_produto = %s'''  # Comando SQL para atualizar o preço de um produto.
-    preco = input("Digite o novo preço: ")  # Solicita ao usuário o novo preço do produto.
-    nome_produto = input("Digite o nome do produto: ")  # Solicita ao usuário o nome do produto a ser atualizado.
-    cursor.execute(sql_update, (preco, nome_produto))  # Executa o comando SQL para atualizar o preço do produto.
+# Função para deletar um produto.
+def deletar_produto(cursor):
+    try:
+        sql_delete = "DELETE FROM produto WHERE nome_produto = %s"
+        nome = input("Digite o nome do produto a ser deletado: ")
+        cursor.execute(sql_delete, (nome,))
+        print("Produto deletado com sucesso!")
+    except Error as e:
+        print(f"Erro ao deletar o produto: {e}")
 
-    print(f"Produto atualizado com sucesso!")  # Exibe mensagem de sucesso após a atualização.
-
-def deletar_produto():
-    sql_delete = '''DELETE FROM produto WHERE nome_produto = %s'''  # Comando SQL para deletar um produto da tabela.
-    nome_produto = input("Digite o nome do produto a ser deletado: ")  # Solicita ao usuário o nome do produto a ser deletado.
-    cursor.execute(sql_delete, (nome_produto))  # Executa o comando SQL para deletar o produto.
-    print(f"Produto deletado com sucesso!")  # Exibe mensagem de sucesso após a deleção.
-
-def listar_tabela_ordenada():
-    sql_select = '''SELECT * FROM produto ORDER BY nome_produto'''  # Comando SQL para selecionar todos os dados da tabela 'produto' ordenados pelo nome do produto.
-    cursor.execute(sql_select)  # Executa o comando SQL para selecionar os dados.
-
-    resultado = cursor.fetchall()  # Recupera todos os resultados da consulta.
-    for linha in resultado:  # Itera sobre cada linha do resultado.
-        print(linha)  # Exibe cada linha.
-
-    print(f"Produtos listados com sucesso!")  # Exibe mensagem de sucesso após a listagem.
-
+# Função para deletar a tabela.
+def deletar_tabela(cursor):
+    try:
+        cursor.execute("DROP TABLE IF EXISTS produto")
+        print("Tabela deletada com sucesso!")
+    except Error as e:
+        print(f"Erro ao deletar a tabela: {e}")
 
 # Função principal que orquestra a execução do programa.
 def main():
-    if conn is None:  # Verifica se a conexão com o banco de dados falhou.
-        return  # Sai da função se a conexão não foi estabelecida.
-    print("Conectado ao banco de dados!")
-    while True: 
-        # Exibe o menu de opções para o usuário.
-        print("\nMenu loja:") 
-        print("c - Criar tabela")  
-        print("r - listar tabela")  
-        print("u - atualizar produto na tabela")  
-        print("i - inserir produto na tabela")
-        print("d - deletar tabela")
-        print("s - sair")  
-    
+    conn = conectar_banco()
+    if conn is None:
+        print("Não foi possível conectar ao banco de dados.")
+        return
 
+    criar_database_sql(conn)
+    cursor = conn.cursor()
 
-        # Solicita ao usuário que escolha uma opção do menu.
-        escolha = input("Escolha uma opção (1-4): ")
+    # Dicionário para mapear opções do menu às funções correspondentes.
+    opcoes = {
+        "c": lambda: criar_tabela_sql(cursor),
+        "i": lambda: inserir_na_tabela(cursor),
+        "r": lambda: listar_tabela(cursor),
+        "u": lambda: atualizar_tabela(cursor),
+        "d": lambda: deletar_tabela(cursor),
+        "dp": lambda: deletar_produto(cursor),
+    }
 
-        # Verifica a escolha do usuário e executa a ação correspondente.
-        if escolha == "c": 
-            criar_tabela_sql()  # Chama a função para criar a tabela.
-        elif escolha == "r": 
-            listar_tabela()  # Chama a função para listar os dados da tabela.
-        elif escolha == "u":  
-            atualizar_tabela()  # Chama a função para atualizar um produto na tabela.
-        elif escolha == "i": 
-            inserir_na_tabela()  # Chama a função para inserir um produto na tabela.
-        elif escolha == "d": 
-            deletar_tabela()  # Chama a função para deletar a tabela.
-        elif escolha == "s": 
-            os.system("cls")  # Limpa a tela do terminal (somente no Windows).
-            break  # Sai do loop e encerra o programa.
+    while True:
+        print("\nMenu loja:")
+        print("c - Criar tabela")
+        print("i - Inserir produto na tabela")
+        print("r - Listar tabela")
+        print("u - Atualizar produto na tabela")
+        print("d - Deletar tabela")
+        print("dp - Deletar produto")
+        print("s - Sair")
+
+        escolha = input("Escolha uma opção: ").lower()
+        if escolha == "s":
+            os.system("cls")
+            break
+        elif escolha in opcoes:
+            opcoes[escolha]()
+            conn.commit()  # Confirma as alterações no banco de dados.
         else:
-            print("Opção inválida!")  # Exibe uma mensagem de erro.
+            print("Opção inválida!")
 
-    conn.close()  # Fecha a conexão com o banco de dados.
-    print("\nPrograma encerrado.")  # Exibe uma mensagem indicando que o programa foi encerrado.
+    cursor.close()
+    conn.close()
+    print("\nPrograma encerrado.")
 
 # Ponto de entrada do programa.
 if __name__ == "__main__":
-    conn = conectar_banco()  # Estabelece a conexão com o banco de dados.
-    cursor = conn.cursor()  # Cria um cursor para executar comandos SQL.
-    main()  # Chama a função principal
+    main()
