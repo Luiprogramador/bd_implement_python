@@ -9,7 +9,6 @@ def conectar_banco():
             user='root',
             password='lui1234',
             host='localhost'
-            #database='db_loja_3'
         )
         return conn
     except Error as e:
@@ -20,8 +19,8 @@ def conectar_banco():
 def criar_database_sql(conn):
     try:
         cursor = conn.cursor()
-        cursor.execute("CREATE DATABASE IF NOT EXISTS db_loja_3")
-        cursor.execute("USE db_loja_3")
+        cursor.execute("CREATE DATABASE IF NOT EXISTS db_biblioteca")
+        cursor.execute("USE db_biblioteca")
         print("Banco de dados configurado com sucesso!")
     except Error as e:
         print(f"Erro ao criar o banco de dados: {e}")
@@ -29,80 +28,78 @@ def criar_database_sql(conn):
 # Função para criar a tabela no banco de dados.
 def criar_tabela_sql(cursor):
     try:
-        sql_create = '''CREATE TABLE IF NOT EXISTS produto(
+        sql_create = '''CREATE TABLE IF NOT EXISTS livro(
             id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-            nome_produto VARCHAR(25) UNIQUE NOT NULL,
-            preco DECIMAL(9, 2) NOT NULL,
-            data_validade DATE NULL)'''
+            titulo VARCHAR(100) UNIQUE NOT NULL,
+            autor VARCHAR(50) NOT NULL,
+            ano_publicacao INT NULL,
+            genero VARCHAR(30) NULL)'''
         cursor.execute(sql_create)
         print("Tabela criada com sucesso!")
     except Error as e:
         print(f"Erro ao criar a tabela: {e}")
 
-# Função para inserir um produto na tabela.
+# Função para inserir um livro na tabela.
 def inserir_na_tabela(cursor):
     try:
-        sql_insert = '''INSERT INTO produto(nome_produto, preco, data_validade)
-                        VALUES (%s, %s, %s)'''
-        nome = input("Digite o nome do produto: ")
-        preco = float(input("Digite o preço do produto: "))
-        validade = input("Digite a data de validade (YYYY-MM-DD): ")
-        cursor.execute(sql_insert, (nome, preco, validade))
-        print("Produto inserido com sucesso!")
+        sql_insert = '''INSERT INTO livro(titulo, autor, ano_publicacao, genero)
+                        VALUES (%s, %s, %s, %s)'''
+        titulo = input("Digite o título do livro: ")
+        autor = input("Digite o autor do livro: ")
+        ano_publicacao = int(input("Digite o ano de publicação: "))
+        genero = input("Digite o gênero do livro: ")
+        cursor.execute(sql_insert, (titulo, autor, ano_publicacao, genero))
+        print("Livro inserido com sucesso!")
     except Error as e:
-        print(f"Erro ao inserir o produto: {e}")
+        print(f"Erro ao inserir o livro: {e}")
 
-# Função para listar os produtos.
+# Função para listar os livros.
 def listar_tabela(cursor):
     try:
-        sql = "SELECT * FROM produto"
+        sql = "SELECT * FROM livro"
 
         cursor.execute(sql)
 
         resultado = cursor.fetchall()
 
         if not resultado:
-            print("tabela vazia.")
-
+            print("Tabela vazia.")
         else:
-            for func in resultado:
-                print(func)
+            for livro in resultado:
+                print("ID:", livro[0])
+                print("Título:", livro[1])
+                print("Autor:", livro[2])
+                print("Ano de Publicação:", livro[3])
+                print("Gênero:", livro[4])
                 print("-" * 35)
-
-            for func in resultado:
-                print("ID:", func[0])
-                print("Nome:", func[1])
-                print("preço:", func[2])
-                print("data de validade:", func[3])
-                print("-"*35)
     except Error as e:
-        print(f"Erro ao consultar produtos: {e}")
+        print(f"Erro ao consultar livros: {e}")
 
-# Função para atualizar o preço de um produto.
+# Função para atualizar o ano de publicação de um livro.
 def atualizar_tabela(cursor):
     try:
-        sql_update = "UPDATE produto SET preco = %s WHERE nome_produto = %s"
-        nome = input("Digite o nome do produto: ")
-        preco = float(input("Digite o novo preço: "))
-        cursor.execute(sql_update, (preco, nome))
-        print("Produto atualizado com sucesso!")
+        sql_update = "UPDATE livro SET ano_publicacao = %s WHERE titulo = %s"
+        titulo = input("Digite o título do livro: ")
+        ano_publicacao = int(input("Digite o novo ano de publicação: "))
+        cursor.execute(sql_update, (ano_publicacao, titulo))
+        print("Livro atualizado com sucesso!")
     except Error as e:
-        print(f"Erro ao atualizar o produto: {e}")
+        print(f"Erro ao atualizar o livro: {e}")
 
-# Função para deletar um produto.
-def deletar_produto(cursor):
+# Função para deletar um livro.
+def deletar_livro(cursor):
     try:
-        sql_delete = "DELETE FROM produto WHERE nome_produto = %s"
-        nome = input("Digite o nome do produto a ser deletado: ")
-        cursor.execute(sql_delete, (nome,))
-        print("Produto deletado com sucesso!")
+        sql_delete = "DELETE FROM livro WHERE titulo = %s"
+        titulo = input("Digite o título do livro a ser deletado: ")
+        cursor.execute(sql_delete, (titulo,))
+        print("Livro deletado com sucesso!")
     except Error as e:
-        print(f"Erro ao deletar o produto: {e}")
+        print(f"Erro ao deletar o livro: {e}")
 
 # Função para deletar a tabela.
 def deletar_tabela(cursor):
     try:
-        cursor.execute("DROP TABLE IF EXISTS produto")
+        cursor.execute("DROP TABLE IF EXISTS livro")
         print("Tabela deletada com sucesso!")
     except Error as e:
         print(f"Erro ao deletar a tabela: {e}")
@@ -120,21 +117,21 @@ def main():
     # Dicionário para mapear opções do menu às funções correspondentes.
     opcoes = {
         "c": lambda: criar_tabela_sql(cursor),
-        "i": lambda: inserir_na_tabela(cursor),
         "r": lambda: listar_tabela(cursor),
         "u": lambda: atualizar_tabela(cursor),
+        "i": lambda: inserir_na_tabela(cursor),
         "d": lambda: deletar_tabela(cursor),
-        "dp": lambda: deletar_produto(cursor),
+        "dl": lambda: deletar_livro(cursor),
     }
 
     while True:
-        print("\nMenu loja:")
+        print("\nMenu biblioteca:")
         print("c - Criar tabela")
-        print("i - Inserir produto na tabela")
         print("r - Listar tabela")
-        print("u - Atualizar produto na tabela")
+        print("u - Atualizar livro na tabela")
+        print("i - Inserir livro na tabela")
         print("d - Deletar tabela")
-        print("dp - Deletar produto")
+        print("dl - Deletar livro")
         print("s - Sair")
 
         escolha = input("Escolha uma opção: ").lower()
